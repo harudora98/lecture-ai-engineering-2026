@@ -17,7 +17,7 @@ import sqlite_vec
 from app.config import (
     EMBEDDING_DIMENSIONS, EMBEDDING_MAX_TOKENS, EMBEDDING_MODEL,
     RAG_DB, RAG_DOCUMENT_IDS, RAG_SOURCE, RAG_TOP_K, RAG_TREE, get_api_key,
-    RAG_GRAPH, GRAPH_START_K, GRAPH_HOPS, GRAPH_MAX_RESULTS,
+    RAG_GRAPH, GRAPH_START_K, GRAPH_HOPS, GRAPH_MAX_RESULTS, RAG_NEIGHBOR_PAGES,
 )
 
 
@@ -138,6 +138,80 @@ def search(query: str) -> list[dict]:
         return [dict(row) for row in rows]
 
 
+_PAGE_KEYS = (
+    "page_id", "document_id", "lecture", "document_title",
+    "section", "title", "page", "content",
+)
+
+
+def expand_neighbors(
+    hits: list[dict], window: int = 1, pages: list[dict] | None = None,
+) -> list[dict]:
+    """検索ヒットに、同じ資料内の前後ページを付けて返す。"""
+    pages = load_pages() if pages is None else pages
+    by_doc: dict[str, list[dict]] = {}
+    index: dict[str, tuple[str, int]] = {}
+    for page in pages:
+        doc_pages = by_doc.setdefault(page["document_id"], [])
+        index[page["page_id"]] = (page["document_id"], len(doc_pages))
+        doc_pages.append(page)
+
+    results: list[dict] = []
+    seen: set[str] = set()
+    # 検索で直接ヒットしたページは、前後ページとして先取りせず検索順位の位置に置く。
+    hit_ids = {hit["page_id"] for hit in hits}
+
+    def from_hit(hit: dict) -> dict:
+        item = {key: hit[key] for key in _PAGE_KEYS}
+        item["distance"] = hit["distance"]
+        item["retrieved_by"] = "search"
+        return item
+
+    def from_neighbor(page: dict, neighbor_of: str) -> dict:
+        item = {key: page[key] for key in _PAGE_KEYS}
+        item["distance"] = None
+        item["retrieved_by"] = "neighbor"
+        item["neighbor_of"] = neighbor_of
+        return item
+
+    for hit in hits:
+        page_id = hit["page_id"]
+        if page_id not in seen:
+            seen.add(page_id)
+            results.append(from_hit(hit))
+        if window <= 0 or page_id not in index:
+            continue
+        doc_id, position = index[page_id]
+        doc_pages = by_doc[doc_id]
+        for offset in range(1, window + 1):
+            prev = position - offset
+            if prev < 0:
+                break
+            neighbor = doc_pages[prev]
+            if neighbor["page_id"] not in seen and neighbor["page_id"] not in hit_ids:
+                seen.add(neighbor["page_id"])
+                results.append(from_neighbor(neighbor, page_id))
+        for offset in range(1, window + 1):
+            nxt = position + offset
+            if nxt >= len(doc_pages):
+                break
+            neighbor = doc_pages[nxt]
+            if neighbor["page_id"] not in seen and neighbor["page_id"] not in hit_ids:
+                seen.add(neighbor["page_id"])
+                results.append(from_neighbor(neighbor, page_id))
+    return results
+
+
+def search_with_neighbors(query: str, window: int | None = None) -> list[dict]:
+    """search()の結果に前後ページを付ける。windowが0ならsearch()と同じ。"""
+    if window is None:
+        window = RAG_NEIGHBOR_PAGES
+    hits = search(query)
+    if window == 0:
+        return hits
+    return expand_neighbors(hits, window=window)
+
+
 def search_graph(query: str) -> dict:
     """ベクトル検索を入口に、前後ページと共通用語で候補を広げる。"""
     pages = {page["page_id"]: page for page in load_pages(RAG_SOURCE)}
@@ -201,11 +275,18 @@ def run_full_context(agent, question: str, model, instructions: str, prompt_temp
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="エージェントを使わず、講義資料の検索だけを実行する")
     parser.add_argument("query", help="調べたい内容")
+    parser.add_argument("--neighbors", type=int, default=0, metavar="N",
+                        help="各ヒットの前後に付けるページ数（既定: 0）")
     args = parser.parse_args()
-    for i, result in enumerate(search(args.query), 1):
+    results = search_with_neighbors(args.query, window=args.neighbors)
+    for i, result in enumerate(results, 1):
         print(f"\n{'=' * 60}\n検索結果 {i}\n{'=' * 60}")
         print(f"講義: {result['document_title']}")
         print(f"章: {result['section']}")
         print(f"タイトル: {result['title']}")
         print(f"ページ: {result['page']}")
+        if "retrieved_by" in result:
+            print(f"retrieved_by: {result['retrieved_by']}")
+        if result.get("neighbor_of"):
+            print(f"neighbor_of: {result['neighbor_of']}")
         print(f"\n{result['content']}")

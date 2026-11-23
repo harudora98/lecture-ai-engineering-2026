@@ -1,0 +1,36 @@
+[question] 第1回の例題（講義中の大量の質問にAIで答える）で、問題設定からデプロイまでどう進めますか？
+[AIE_RAG_NEIGHBORS] 0
+                 pydantic-ai v2.57.0 • Python 3.14.4
+      / \
+     /   \       agent: target • model: google:gemini-3.5-flash-lite • tools: 1 • capabilities: 0
+   /___.___\
+  /    |    \    observability: off — see every model and tool call live, with cost
+/      |      \    set it up free with Logfire and a GitHub login: https://pydantic.dev/ai-setup.md
+`---.._|_..---'    or use any OpenTelemetry backend: https://pydantic.dev/docs/ai/logfire/#otel
+
+                 goes away once observability is on — or PYDANTIC_AI_NO_BANNER=1
+[model] gemini-3.5-flash-lite
+第1回の例題である「講義中の大量の質問にAIでどう対応するか」では、問題設定からデプロイに至るまで、AIシステム開発の全体的なプロセスに沿って以下のように検討を進めます（第1回・PDF p.51）。
+
+### 1. 問題設定
+- **入力と出力の定義**: 「お題」に対して、どのようなインプットを受け取り、どのようなアウトプットを返すかを決めます。例えば、単純な「質問応答（入力：受講生の質問 / 出力：回答文）」だけでなく、「質問のフィルタリング」「類似質問のサジェスト」「回答のドラフト作成」など、何通りものアプローチが考えられます（第1回・PDF p.39）。
+- **評価方法の検討**: 作成したシステムの良さをどう測るかを決めます。人の好みや満足度で採点する「人手評価（Human Preference Score）」や、「LLM-as-a-Judge（LLMに採点させる方法）」などが挙げられます（第1回・PDF p.40）。また、平均正答率だけでなく、非機能要件（応答速度、コストなど）や、開発者自身がエンドユーザーとは異なるという点（Rule #23 “You are not a typical end user.”）にも注意する必要があります（第1回・PDF p.41）。
+
+### 2. データ収集
+- 学習や評価に必要なデータを用意し、データの流れを設計します（第1回・PDF p.51）。
+
+### 3. モデル学習・プロトタイプ作成
+- モデルの選択や適応を行い、うまく動かない原因の切り分けを行います（第1回・PDF p.51）。
+
+### 4. デプロイ
+- 作ったものを実際に使える状態にします（第1回・PDF p.51）。
+- Webでの公開、応答速度の確保、利用者が急増したときの負荷への対応などを考慮したシステム構成を設計します（第1回・PDF p.51）。
+
+--- trace ---
+[tool call]   search_materials({'query': '第1回 例題 大量の質問にAIで答える'})
+[tool return] search_materials -> {"results": [{"page_id": "lec01-main-p036", "document_id": "lec01-main", "lecture": 1, "document_title": "AIエンジニアリング概論とA…
+[tool call]   search_materials({'query': '第1回 例題 評価 プロトタイプ デプロイ'})
+[tool return] search_materials -> {"results": [{"page_id": "lec01-main-p051", "document_id": "lec01-main", "lecture": 1, "document_title": "AIエンジニアリング概論とA…
+[time] 回答完了まで 6.21 秒（検索・埋め込みを含む）
+[usage] 入力 5,207 tokens / 出力 488 tokens / モデル応答 3 回
+[cost] 生成APIの推定コスト: $0.002782 USD（埋め込み・索引構築分は含まない）
