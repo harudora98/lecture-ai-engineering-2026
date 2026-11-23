@@ -1,0 +1,88 @@
+
+===== A_baseline | Q: LoRAとQLoRAの違いは？ =====
+LoRAとQLoRAの違いは、ベースモデルの重みの扱い方にあります。
+
+* **LoRA**:
+  事前学習済みの重みを固定したまま、重みの更新分を2つの小さな低ランク行列（アダプタ）の積で表し、その部分だけを学習するPEFT（Parameter-Efficient Fine-Tuning）手法です。学習パラメータや保存するファイルサイズを大幅に削減できます。
+
+* **QLoRA**:
+  LoRAの仕組みに加えて、**ベースモデルの重みを4ビットなどに量子化**してから学習を行う手法です。メモリ消費量をさらに劇的に抑えられるため、より大きなモデルを小さなGPU環境でも扱えるようになります。
+
+第2回</code>
+
+--- trace ---
+[tool call]   search_glossary({'query': 'LoRA'})
+[tool call]   search_glossary({'query': 'QLoRA'})
+[tool return] search_glossary -> [{"term": "LoRA", "lecture": 2, "definition": "事前学習済みの重みは固定したまま、重みの更新分を2つの小さな行列の積（低ランク行列）で表し、その小さな行列だけを学習するPEFT手法。学習するパラ…
+[tool return] search_glossary -> [{"term": "QLoRA", "lecture": 2, "definition": "ベースモデルの重みを4ビットなどに量子化してメモリを節約したうえで、LoRAで学習する手法。より大きなモデルを小さなGPUで扱える。本講座の第2…
+[usage] RunUsage(cost=Decimal('0.0008344'), details={'text_prompt_tokens': 1198}, input_text_tokens=1198, input_tokens=1198, output_tokens=190, requests=2, tool_calls=2)
+
+===== A_baseline | Q: AIE2026の講座で使う「lecNN-start タグ」とは何ですか？ =====
+「lecNN-start タグ」とは、AIE2026の講座リポジトリにおいて、各回の演習開始時点のコードに付けられているGitタグ（例: `lec03-start`）のことです。
+
+これを利用すると、もし前の回が完了していなくても、このタグから新しくブランチを作成することで、いつでも特定の回の演習からスムーズに学習を始めることができます。
+
+関係する回：第1回
+
+--- trace ---
+[tool call]   search_glossary({'query': 'lecNN-start タグ'})
+[tool return] search_glossary -> [{"term": "lecNN-start タグ", "lecture": 1, "definition": "AIE2026の講座repoで、各回の演習開始時点のコードに付けているGitタグ（例：lec03-start）。前の回が終わっ…
+[usage] RunUsage(cost=Decimal('0.0005255'), details={'text_prompt_tokens': 785}, input_text_tokens=785, input_tokens=785, output_tokens=116, requests=2, tool_calls=1)
+
+===== B_no_search_rule | Q: LoRAとQLoRAの違いは？ =====
+LoRAとQLoRAの違いは以下の通りです。
+
+* **LoRA**: 事前学習済みの重みを固定したまま、重みの更新分を小さな低ランク行列（アダプタ）で表し、その部分だけを学習する効率的な手法です。学習パラメータや保存ファイルを大幅に削減できます。
+* **QLoRA**: LoRAの仕組みをベースにしつつ、ベースモデルの重みを4ビットなどに**量子化**（圧縮）してメモリ消費をさらに劇的に削減した手法です。これにより、より大きなモデルを比較的小さなGPUでも効率よく学習できるようになります。
+
+第2回
+
+（参考：第2回演習では、GPUに乗るモデルに対してLoRAによる学習を行い、4ビット量子化時のメモリや出力の違いについても発展課題として取り扱います。）
+
+--- trace ---
+[tool call]   search_glossary({'query': 'LoRA'})
+[tool call]   search_glossary({'query': 'QLoRA'})
+[tool return] search_glossary -> [{"term": "LoRA", "lecture": 2, "definition": "事前学習済みの重みは固定したまま、重みの更新分を2つの小さな行列の積（低ランク行列）で表し、その小さな行列だけを学習するPEFT手法。学習するパラ…
+[tool return] search_glossary -> [{"term": "QLoRA", "lecture": 2, "definition": "ベースモデルの重みを4ビットなどに量子化してメモリを節約したうえで、LoRAで学習する手法。より大きなモデルを小さなGPUで扱える。本講座の第2…
+[usage] RunUsage(cost=Decimal('0.0008675'), details={'text_prompt_tokens': 1150}, input_text_tokens=1150, input_tokens=1150, output_tokens=209, requests=2, tool_calls=2)
+
+===== B_no_search_rule | Q: AIE2026の講座で使う「lecNN-start タグ」とは何ですか？ =====
+「lecNN-start タグ」とは、AIE2026の講座用リポジトリにおいて、各回の演習を開始するときのコードの状態に付けられているGitタグ（例: `lec03-start`）のことです。
+
+前の回の演習が完了していなくても、このタグを指定して新しくブランチを作成すれば、その回の演習をスムーズに始められるようになっています。
+
+（関連する回: 第1回）
+
+--- trace ---
+[tool call]   search_glossary({'query': 'lecNN-start タグ'})
+[tool return] search_glossary -> [{"term": "lecNN-start タグ", "lecture": 1, "definition": "AIE2026の講座repoで、各回の演習開始時点のコードに付けているGitタグ（例：lec03-start）。前の回が終わっ…
+[usage] RunUsage(cost=Decimal('0.0005136'), details={'text_prompt_tokens': 737}, input_text_tokens=737, input_tokens=737, output_tokens=117, requests=2, tool_calls=1)
+
+===== C_doc_batch_terms | Q: LoRAとQLoRAの違いは？ =====
+LoRA（Low-Rank Adaptation）とQLoRA（Quantized LoRA）の主な違いは、**ベースモデルの重みの量子化（ビット数の削減）を行っているかどうか**です。
+
+それぞれの特徴は以下の通りです：
+
+* **LoRA**
+  * 事前学習済みの重みを固定したまま、小さな低ランク行列（アダプタ）のみを学習するPEFT（Parameter-Efficient Fine-Tuning）手法です。学習するパラメータを大幅に削減できます。
+* **QLoRA**
+  * LoRAの手法をベースにしつつ、ベースモデルの重みを4ビットなどに**量子化**してメモリ消費量を極限まで抑えたうえで学習を行う手法です。これにより、より大きなモデルを限られたGPUメモリで効率よく微調整（ファインチューニング）できるようになります。
+
+（関係する回：第2回）
+
+--- trace ---
+[tool call]   search_glossary({'query': 'LoRA QLoRA'})
+[tool return] search_glossary -> [{"term": "LoRA", "lecture": 2, "definition": "事前学習済みの重みは固定したまま、重みの更新分を2つの小さな行列の積（低ランク行列）で表し、その小さな行列だけを学習するPEFT手法。学習するパラ…
+[usage] RunUsage(cost=Decimal('0.0007879'), details={'text_prompt_tokens': 893}, input_text_tokens=893, input_tokens=893, output_tokens=208, requests=2, tool_calls=1)
+
+===== C_doc_batch_terms | Q: AIE2026の講座で使う「lecNN-start タグ」とは何ですか？ =====
+「lecNN-start タグ」とは、AIE2026の講座リポジトリにおいて、各回の演習開始時点のコードに付けられているGitタグ（例：`lec03-start`）のことです。
+
+前の回の進捗が追いついていなくても、このタグから新しくブランチを作成することで、その回の演習をスムーズに始められるように用意されています。
+
+関係する回：第1回
+
+--- trace ---
+[tool call]   search_glossary({'query': 'lecNN-start タグ'})
+[tool return] search_glossary -> [{"term": "lecNN-start タグ", "lecture": 1, "definition": "AIE2026の講座repoで、各回の演習開始時点のコードに付けているGitタグ（例：lec03-start）。前の回が終わっ…
+[usage] RunUsage(cost=Decimal('0.0005236'), details={'text_prompt_tokens': 787}, input_text_tokens=787, input_tokens=787, output_tokens=115, requests=2, tool_calls=1)
