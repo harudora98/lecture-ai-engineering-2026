@@ -1,0 +1,26 @@
+[question] MCPとは何ですか？
+[AIE_RAG_NEIGHBORS] 0
+                 pydantic-ai v2.57.0 • Python 3.14.4
+      / \
+     /   \       agent: target • model: google:gemini-3.5-flash-lite • tools: 1 • capabilities: 0
+   /___.___\
+  /    |    \    observability: off — see every model and tool call live, with cost
+/      |      \    set it up free with Logfire and a GitHub login: https://pydantic.dev/ai-setup.md
+`---.._|_..---'    or use any OpenTelemetry backend: https://pydantic.dev/docs/ai/logfire/#otel
+
+                 goes away once observability is on — or PYDANTIC_AI_NO_BANNER=1
+[model] gemini-3.5-flash-lite
+講義資料によると、MCP（モデルコンテキストプロトコル）とは、**AIと外部ツールやデータをつなぐ共通の接続方式（共通規格）**のことです（第1回・PDF p.13、第3回・PDF p.24）。
+
+主な特徴や利点として、以下のような点が挙げられています。
+
+* **権限や認可の管理**：直接シェルツールやCLIを使う場合とは異なり、MCPサーバーを介すことで、公開する操作や対象をサーバー側で絞り込む（認可する）ことができます（第3回・PDF p.24）。
+* **監査の実施**：呼び出しをサーバー側で記録（監査）することができます（第3回・PDF p.24）。
+* **エコシステムの展開**：Linux Foundation 傘下の団体で管理されるなど、AIと外部ツールをつなぐ規格として整備が進められています（第1回・PDF p.13）。
+
+--- trace ---
+[tool call]   search_materials({'query': 'MCP'})
+[tool return] search_materials -> {"results": [{"page_id": "lec03-main-p024", "document_id": "lec03-main", "lecture": 3, "document_title": "AIエージェント", "se…
+[time] 回答完了まで 3.50 秒（検索・埋め込みを含む）
+[usage] 入力 2,364 tokens / 出力 220 tokens / モデル応答 2 回
+[cost] 生成APIの推定コスト: $0.001259 USD（埋め込み・索引構築分は含まない）

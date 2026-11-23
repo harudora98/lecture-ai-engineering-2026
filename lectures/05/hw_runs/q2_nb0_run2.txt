@@ -1,0 +1,50 @@
+[question] 第1回の例題（講義中の大量の質問にAIで答える）で、問題設定からデプロイまでどう進めますか？
+[AIE_RAG_NEIGHBORS] 0
+                 pydantic-ai v2.57.0 • Python 3.14.4
+      / \
+     /   \       agent: target • model: google:gemini-3.5-flash-lite • tools: 1 • capabilities: 0
+   /___.___\
+  /    |    \    observability: off — see every model and tool call live, with cost
+/      |      \    set it up free with Logfire and a GitHub login: https://pydantic.dev/ai-setup.md
+`---.._|_..---'    or use any OpenTelemetry backend: https://pydantic.dev/docs/ai/logfire/#otel
+
+                 goes away once observability is on — or PYDANTIC_AI_NO_BANNER=1
+[model] gemini-3.5-flash-lite
+第1回の講義資料にある「講義中の大量の質問にAIで答える」という例題では、AIシステム開発の一般的な5つの工程に沿って進めていきます（第1回・PDF p.37）。それぞれの工程で何を考えるか、以下に全体の流れと進め方のヒントを整理します。
+
+---
+
+### 1. 問題設定
+* **入力と出力の決定**:
+  お題「講義中の質問に回答する講師の負担を減らす」に対して、入力を「受講生の質問」、出力を「回答文（チャットボット）」にするなど、システムの役割を何通りかの選択肢から明確に定義します（第1回・PDF p.38, p.39）。他にも「類似質問のサジェスト」や「回答のドラフト作成」といったアプローチも考えられます（第1回・PDF p.39）。
+* **評価方法の決定**:
+  作ったシステムの良さをどう測るか、人手評価（人の好みや満足度で採点）や、LLMに採点させる方法（LLM-as-a-Judge）などを検討します（第1回・PDF p.40）。
+
+### 2. データ収集
+* **データの準備とパイプライン設計**:
+  学習用・評価用のデータを集め、入力から出力までのデータの流れを設計します（第1回・PDF p.44）。
+* **進め方のコツ**:
+  「100日かけてデータを集める」ようなアンチパターンを避け、まずは3日などで集められるデータで早く作り、早く改善に入れるようにします（第1回・PDF p.45）。また、質問データだけでなく「どのスライドのどの時点の質問か」など、人間が読んでも文脈が分かる情報をあわせて集めることが重要です（第1回・PDF p.45）。
+
+### 3. モデル学習
+* **モデルの選択とデバッギング**:
+  問題に対して適切な基盤モデルを選択し、学習や推論がうまくいかない原因の切り分けを行います（第1回・PDF p.47）。
+
+### 4. デプロイ
+* **使える状態での公開**:
+  Webでの公開、応答速度、利用者が増えたときの負荷への対応などを考慮し、システムを実際に利用できる形で公開します（第1回・PDF p.51）。
+
+### 5. 改善
+* **運用・監視・見直し**:
+  実際に運用を始めると、「思ったより性能が出ない」「想定外の質問が来る」「応答が遅い・コストが高い」といった課題が見つかります。これらに応じて、前の工程（データや問題設定、システム構成）へと行ったり来たりしながら、継続的にシステムをブラッシュアップしていきます（第1回・PDF p.53）。
+
+--- trace ---
+[tool call]   search_materials({'query': '第1回 例題 大量の質問にAIで答える'})
+[tool return] search_materials -> {"results": [{"page_id": "lec01-main-p036", "document_id": "lec01-main", "lecture": 1, "document_title": "AIエンジニアリング概論とA…
+[tool call]   search_materials({'query': '第1回 例題 デプロイ'})
+[tool return] search_materials -> {"results": [{"page_id": "lec01-main-p051", "document_id": "lec01-main", "lecture": 1, "document_title": "AIエンジニアリング概論とA…
+[tool call]   search_materials({'query': '第1回 [2] データ収集 [3] モデル学習'})
+[tool return] search_materials -> {"results": [{"page_id": "lec01-main-p047", "document_id": "lec01-main", "lecture": 1, "document_title": "AIエンジニアリング概論とA…
+[time] 回答完了まで 8.16 秒（検索・埋め込みを含む）
+[usage] 入力 9,948 tokens / 出力 693 tokens / モデル応答 4 回
+[cost] 生成APIの推定コスト: $0.004717 USD（埋め込み・索引構築分は含まない）

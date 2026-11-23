@@ -1,0 +1,50 @@
+[question] 第1回の例題（講義中の大量の質問にAIで答える）で、問題設定からデプロイまでどう進めますか？
+[AIE_RAG_NEIGHBORS] 1
+                 pydantic-ai v2.57.0 • Python 3.14.4
+      / \
+     /   \       agent: target • model: google:gemini-3.5-flash-lite • tools: 1 • capabilities: 0
+   /___.___\
+  /    |    \    observability: off — see every model and tool call live, with cost
+/      |      \    set it up free with Logfire and a GitHub login: https://pydantic.dev/ai-setup.md
+`---.._|_..---'    or use any OpenTelemetry backend: https://pydantic.dev/docs/ai/logfire/#otel
+
+                 goes away once observability is on — or PYDANTIC_AI_NO_BANNER=1
+[model] gemini-3.5-flash-lite
+第1回の例題である「講義中の大量の質問にAIでどう対応するか」というお題（第1回・PDF p.36）について、AIエンジニアリングの全体工程（問題設定・データ収集・モデル学習・デプロイ・改善）に沿ってどのように進めていくかを考えてみましょう。
+
+### 1. 問題設定
+まず、入力と出力をどのように定義するかを決めます（第1回・PDF p.37）。同じ「講師の負担を減らす」というお題でも、アプローチによっていくつか選択肢があります（第1回・PDF p.39）。
+* **入力・出力の設計例：**
+  * ① 質問応答：受講生の「質問」を入力し、AIが「回答文」を出力する（チャットボットなど）
+  * ② 質問のフィルタリング：質問の一覧から、講師が答えるべき質問を選別する
+  * ③ 類似質問のサジェスト：受講生の質問に対し、過去の似た質問と回答を提示する
+  * ④ 回答のドラフト作成：質問に対し、講師が確認する回答案を作成する
+* **評価方法の設計：**
+  * 作成したAIの出力の良さをどう測るかを決めます（第1回・PDF p.40）。人の好みや満足度で採点する「人手評価（Human Preference Score）」や、LLMに採点させる「LLM-as-a-Judge」などの手法を検討します。
+
+### 2. データ収集
+* AIモデルに入力するデータや、動作を評価するためのデータ（過去の講義での質問・回答ペアや講義資料など）を用意します（第1回・PDF p.37）。
+* データの流れをどのように設計するかを考えます。
+
+### 3. モデル学習（または外部接続・基盤モデルの利用）
+* どのようなモデルを選択・適応するかを検討します（第1回・PDF p.37）。
+* 講義資料を検索して回答させ、根拠も示す手法（RAG：Retrieval-Augmented Generation）の利用などが考えられます（第1回・PDF p.19）。
+* うまくいかない原因の切り分けを行います。
+
+### 4. デプロイ
+* 作成したシステムを、受講生や講師が実際に使える形で公開します（第1回・PDF p.37）。
+* 実際の講義中には大量のアクセスや質問が発生するため、システム構成や負荷対策を考慮する必要があります。
+
+### 5. 改善
+* 運用状況を監視し、自動テストやフィードバックを反映させるなど、継続的な改善サイクル（MLOpsなど）を回します（第1回・PDF p.35, 37）。
+
+---
+
+実際のシステム開発や最終課題（質問応答のAI補助機能のPoCなど）では、これらの一連の工程を意識しながら、まずは小さな試作から始めて評価と改善のサイクルを回していくことになります（第1回・PDF p.35, 62）。
+
+--- trace ---
+[tool call]   search_materials({'query': '第1回 例題 大量の質問 AI'})
+[tool return] search_materials -> {"results": [{"page_id": "lec01-main-p036", "document_id": "lec01-main", "lecture": 1, "document_title": "AIエンジニアリング概論とA…
+[time] 回答完了まで 4.78 秒（検索・埋め込みを含む）
+[usage] 入力 4,463 tokens / 出力 699 tokens / モデル応答 2 回
+[cost] 生成APIの推定コスト: $0.002540 USD（埋め込み・索引構築分は含まない）

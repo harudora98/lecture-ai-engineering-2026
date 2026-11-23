@@ -1,0 +1,6 @@
+input 6012 output 260 cache_read 2030 requests 2
+details {'text_prompt_tokens': 6012, 'cached_content_tokens': 2030, 'text_cache_tokens': 2030}
+cost 0.0019055
+input 6012 output 227 cache_read 2030 requests 2
+details {'text_prompt_tokens': 6012, 'cached_content_tokens': 2030, 'text_cache_tokens': 2030}
+cost 0.0018230
